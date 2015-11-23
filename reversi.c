@@ -16,10 +16,8 @@
 // 変数                                                                         
 //------------------------------------------------------                        
 
-/* 碁盤 */
+/* 盤 */
 int board[ALLBOARD] = {};
-/* MARK用の碁盤 */
-int check_board[ALLBOARD] = {};
 /* 着手場所の周りを調べる(右から時計回り) */
 int dir8[8] = {+1,+1+WIDTH,+WIDTH,-1+WIDTH,-1,-1-WIDTH,-WIDTH,+1-WIDTH};
 /* 手盤 */
@@ -80,19 +78,15 @@ void BoardIni()
     {
       if( i < WIDTH){
         board[i] = WALL;
-        check_board[i] = WALL;
       }else if((i+1) % WIDTH == 0 || i % WIDTH == 0){
         board[i] = WALL;
-        check_board[i] = WALL;
       }else{
         board[i] = EMPTY;
-        check_board[i] = EMPTY;
       }
     }
 
   for(i = (ALLBOARD-WIDTH);i < ALLBOARD;i++){
     board[i] = WALL;
-    check_board[i] = WALL;
   }
 
   board[65] = WHITE;
@@ -160,7 +154,8 @@ int FlipColor(int color)
 
 int CheckPut(int x,int y)
 {
-  int i,check,remove,koflag;
+  int i,check,remove,flag;
+  flag = 0;
 
   if(x == 0 | y == 0){
     return -1;
@@ -180,9 +175,19 @@ int CheckPut(int x,int y)
   for(i = 0; i < 8; i++){
     if(CheckFlip(z,i) == 1){
       FlipStone(z,i);
+      flag += 1;
     }
   }
 
+  if(flag == 0){
+    color = FlipColor(color);
+    printf("Put error.\n");
+    board[z] = EMPTY;
+    return 0;
+  }else{
+    move++;
+  }
+    
   return z;
 }
 
