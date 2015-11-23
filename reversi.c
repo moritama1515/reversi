@@ -34,9 +34,8 @@ void BoardIni(void);
 void InputMap(int *x,int *y);
 int CheckPut(int x,int y);
 int FlipColor(int color);
-int CheckStone(int z);
-int CheckDirection(int z,int dir);
-
+int CheckFlip(int z,int dir);
+void FlipStone(int z,int dir);
 
 void CheckBoard(void)
 {
@@ -178,45 +177,60 @@ int CheckPut(int x,int y)
     return z;
   }
 
+  for(i = 0; i < 8; i++){
+    if(CheckFlip(z,i) == 1){
+      FlipStone(z,i);
+    }
+  }
+
   return z;
 }
 
-int CheckStone(int z)
+int CheckFlip(int z,int dir)
 {
-  int get_stone,i;
-  
-  for(i = 0; i < 8; i++){
-    get_stone += CheckDirection(z,dir8[i]);
-  }
-  
-  return get_stone;
-}
-
-int CheckDirection(int z,int dir)
-{
-  int check,stone,uncolor;
-
+  int check,uncolor,flag;
+  check = z;
   uncolor = FlipColor(color);
-  check = z + dir8[dir];
-  stone = 0;
-  
-  if(board[check] == WALL || EMPTY){
-    return 0;
-  }
- 
-  if(board[check] == uncolor){
-    stone += 1;
-    CheckDirection(check,dir);
-  }
-  
-  if(board[check] == color){
-    return 0;
-  }
+  flag = 0;
 
-  return stone;
+  while(1)
+    {
+      check += dir8[dir];
+      if(board[check] == EMPTY || board[check] == WALL ){
+	return 0;
+      }
+      if(board[check] == color){
+	break;
+      }
+      if(board[check] == uncolor){
+	flag = 1;
+      }
+    }
+  if(flag == 1){
+    return 1;
+  }else{
+    return 0;
+  }
 }
 
+void FlipStone(int z, int dir)
+{
+  int check,uncolor;
+  check = z;
+  uncolor = FlipColor(color);
 
+  while(1)
+    {
+      check += dir8[dir];
+      if(board[check] == EMPTY || board[check] == WALL || board[check] == color){
+	break;
+      }
+      if(board[check] == uncolor){
+	board[check] = color;
+      }
+    }
+}
+ 
 int main()
 {
   int x,y;
