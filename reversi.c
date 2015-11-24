@@ -90,10 +90,10 @@ void BoardIni()
     board[i] = WALL;
   }
 
-  board[65] = WHITE;
-  board[66] = BLACK;
-  board[77] = BLACK;
-  board[78] = WHITE;
+  board[WIDTH*(WIDTH/2-1)+(WIDTH/2-1)] = WHITE;
+  board[WIDTH*(WIDTH/2-1)+(WIDTH/2)] = BLACK;
+  board[WIDTH*(WIDTH/2)+(WIDTH/2-1)] = BLACK;
+  board[WIDTH*(WIDTH/2)+(WIDTH/2)] = WHITE;
 
 }
 
@@ -237,21 +237,41 @@ void FlipStone(int z, int dir)
     }
 }
  
-int CountScore(int color)
+int CountScore(int check_color)
 {
   int i,score = 0;
   for(i = 0; i <= (WIDTH * WIDTH); i++)
     {
-      if(board[i] == color){
+      if(board[i] == check_color){
 	score += 1;
       }
     }
   return score;
 }
 
+void CheckScore()
+{
+  int black_score,white_score = 0; 
+  black_score = CountScore(BLACK);
+  white_score = CountScore(WHITE);
+  if(color == BLACK){
+    black_score -= 1;
+  }else{
+    white_score -= 1;
+  }
+  printf("BLACK:%d,WHITE:%d\n",black_score,white_score);
+  if(black_score > white_score){
+    printf("BLACK WIN!\n");
+  }else if(white_score > black_score){
+    printf("WHITE WIN!\n");
+  }else{
+    printf("DRAW\n");
+  }
+}
+
 int main()
 {
-  int x,y,black_score,white_score;
+  int x,y;
   printf("Program Start\n");
   BoardIni();
 
@@ -260,17 +280,7 @@ int main()
     InputMap(&x,&y);
 
     if(x == 0 && y == 0){
-      black_score = CountScore(BLACK);
-      white_score = CountScore(WHITE);
-      printf("BLACK:%d,WHITE:%d\n",black_score,white_score);
-      if(black_score > white_score){
-	printf("BLACK WIN!\n");
-      }else if(white_score > black_score){
-	printf("WHITE WIN!\n");
-      }else{
-	printf("DRAW\n\n");
-      }
-
+      CheckScore();
       printf("Program End\n");
       break;
     }
