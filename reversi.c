@@ -2,19 +2,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define B_SIZE 10                  //BOARDSIZE                                   
-#define WIDTH (B_SIZE+2)          //BOARDSIZE+WALL                              
-#define ALLBOARD (WIDTH * WIDTH)  //盤外を含めたBOARDSIZE                       
+#define B_SIZE 10                  //BOARDSIZE
+#define WIDTH (B_SIZE+2)          //BOARDSIZE+WALL
+#define ALLBOARD (WIDTH * WIDTH)  //盤外を含めたBOARDSIZE
 
-#define EMPTY 0 //空点                                                          
-#define BLACK 1 //黒石                                                          
-#define WHITE 2 //白石                                                          
-#define WALL 3  //盤外                                                          
-#define MARK 1  //マーク                                                        
+#define EMPTY 0 //空点
+#define BLACK 1 //黒石
+#define WHITE 2 //白石
+#define WALL 3  //盤外
+#define MARK 1  //マーク
 
 //------------------------------------------------------                        
 // 変数                                                                         
-//------------------------------------------------------                        
+//------------------------------------------------------
 
 /* 盤 */
 int board[ALLBOARD] = {};
@@ -34,6 +34,7 @@ int CheckPut(int x,int y);
 int FlipColor(int color);
 int CheckFlip(int z,int dir);
 void FlipStone(int z,int dir);
+int CountScore(int color);
 
 void CheckBoard(void)
 {
@@ -107,9 +108,9 @@ void InputMap(int *x,int*y)
 
   while(1){
     if(color == 1){
-      printf("BLACK TURN    Pass -> 20\n");
+      printf("BLACK TURN    Pass -> -1\n");
     }else{
-      printf("WHITE TURN    Pass -> 20\n");
+      printf("WHITE TURN    Pass -> -1\n");
     }
 
     /*手の入力*/
@@ -118,7 +119,7 @@ void InputMap(int *x,int*y)
     inputX = atoi(inpx);
 
     /* Pass */
-    if(inputX == 20){
+    if(inputX == -1){
       move++;
       printf("Pass\n");
       break;
@@ -128,18 +129,18 @@ void InputMap(int *x,int*y)
     fgets(inpy,5,stdin);
     inputY = atoi(inpy);
 
-    if(inputX != 0 && inputY != 0 && inputX <= 10 && inputY <= 10){
+    if(inputX != 0 && inputY != 0 && inputX <= B_SIZE && inputY <= B_SIZE){
       break;
     }
 
-    printf("Try Again! Input is 1 ~ 10.\n");
-    printf("If you want to exit,please enter 20 twice.\n");
+    printf("Try Again! Input is 1 ~ %d.\n",B_SIZE);
+    printf("If you want to exit,please enter -1 twice.\n");
 
   }
 
-  if(inputX == 20 && color == 1){
+  if(inputX == -1 && color == 1){
     *x = 0;
-  }else if(inputX == 20 && color == 2){
+  }else if(inputX == -1 && color == 2){
     *y = 0;
   }else{
     *x = inputX;
@@ -236,9 +237,21 @@ void FlipStone(int z, int dir)
     }
 }
  
+int CountScore(int color)
+{
+  int i,score = 0;
+  for(i = 0; i <= (WIDTH * WIDTH); i++)
+    {
+      if(board[i] == color){
+	score += 1;
+      }
+    }
+  return score;
+}
+
 int main()
 {
-  int x,y;
+  int x,y,black_score,white_score;
   printf("Program Start\n");
   BoardIni();
 
@@ -247,9 +260,21 @@ int main()
     InputMap(&x,&y);
 
     if(x == 0 && y == 0){
+      black_score = CountScore(BLACK);
+      white_score = CountScore(WHITE);
+      printf("BLACK:%d,WHITE:%d\n",black_score,white_score);
+      if(black_score > white_score){
+	printf("BLACK WIN!\n");
+      }else if(white_score > black_score){
+	printf("WHITE WIN!\n");
+      }else{
+	printf("DRAW\n\n");
+      }
+
       printf("Program End\n");
       break;
     }
+
     CheckPut(x,y);
     printf("z:%d %d-%d\nmove:%d\n",z,x,y,move);
   }
