@@ -4,8 +4,17 @@
   <meta HTTP-equiv="Content-Type" CONTENT="text/html;charset=UTF-8">
   <title>OthelloDatabase</title>
   <script type="text/javascript" src="draw.js"></script>
+  <script type="text/javascript" src="reversi.js"></script>
 </head>
-<body bgcolor = "#000000" onload ="draw();">
-  <canvas id="main" style="background-color:#ffffff;" width="480" height="360"></canvas>
+<body bgcolor = "#ffffff" onload ="draw();">
+<div align="center">
+  <canvas id="main" style="background-color:#ffffff;" width="340" height="340"></canvas>
+  <form name="fm">
+    X : <input size="20" type="text" name="X">
+    Y : <input size="20" type="text" name="Y">
+    <input type="button" value="入力" onclick="put()">
+  </form>
+
+</div>
 </body>
 </html>

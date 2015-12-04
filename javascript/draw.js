@@ -1,23 +1,42 @@
+/* draw.js */
+
+const sx = 10;         //xの開始地点                                                                     
+const sy = 10;         //yの開始地点                                                                     
+const w = 40;          //マスの幅                                                                        
+const h = 40;          //マスの高さ                                                                      
+const lw = 1;          //ラインの太さ                                                                    
+const box_row = 8;     //マスの数(row)                                                                   
+const box_column = 8;  //マスの数(column)
+
 function draw(){
     var canvas = document.getElementById('main');
     if (canvas.getContext){
         var ctx = canvas.getContext('2d');
-
-        var sx = 10;         //xの開始地点
-        var sy = 10;         //yの開始地点
-        var w = 40;          //マスの幅
-        var h = 40;          //マスの高さ
-        var lw = 1;          //ラインの太さ
-	var box_row = 8;     //マスの数(row)
-	var box_column = 8;  //マスの数(column)
-
-        drawTable(ctx,sx,sy,w,h,lw,box_row,box_column,1);
-
-	drawStone(ctx,sx,sy,w,h,4,4,"w");
-        drawStone(ctx,sx,sy,w,h,5,4,"b");
-        drawStone(ctx,sx,sy,w,h,4,5,"b");
-        drawStone(ctx,sx,sy,w,h,5,5,"w");
+	
     }
+    
+    drawTable(ctx,sx,sy,w,h,lw,box_row,box_column,1);
+    boardIni();
+    boardDraw();
+}
+
+
+function boardDraw(){
+
+    var canvas = document.getElementById('main');
+    if (canvas.getContext){
+        var ctx = canvas.getContext('2d');
+
+    }
+    
+    for(var i = 0; i <= boardAll-1; i++){
+	if(board[i] == inBoard.stone.black){
+	    drawStone(ctx,sx,sy,w,h,i,"b");
+	}else if(board[i] == inBoard.stone.white){
+	    drawStone(ctx,sx,sy,w,h,i,"w");
+	}
+    }
+
 }
 
 function drawTable(tmp,sx,sy,w,h,lw,box_row,box_column,outline){
@@ -47,14 +66,20 @@ function drawTable(tmp,sx,sy,w,h,lw,box_row,box_column,outline){
     tmp.stroke();
 }
 
-function drawStone(tmp,sx,sy,w,h,row,column,color){
+function drawStone(tmp,sx,sy,w,h,z,color){
+    
+    var column = Math.floor(z / boardWidth);
+    var row = z - (column*boardWidth);
+
     var tx = sx + (row*w) - w/2;
     var ty = sy + (column*h) -h/2;
 
     if(color == "b"){
 	drawBlack(tmp,tx,ty,w,h);
-    }else if(color = "w"){
+    }else if(color == "w"){
 	drawWhite(tmp,tx,ty,w,h);
+    }else if(color == "m"){
+	drawMark(tmp,tx,ty,w,h);
     }else{
 	alert("error in drawStone");
     }
@@ -67,10 +92,11 @@ function drawBlack(tmp,ax,ay,w,h){
 	var d = h;
     }
 
-    tmp.lineWidth = 2;
+    tmp.lineWidth = 1;
     tmp.beginPath();
     
     tmp.arc(ax,ay,(d*0.8)/2,0,Math.PI*2,true);
+    tmp.fillStyle = "black";
     tmp.fill();
 
     tmp.stroke();
@@ -83,10 +109,13 @@ function drawWhite(tmp,ax,ay,w,h){
         var d = h;
     }
 
-    tmp.lineWidth = 2;
+    tmp.lineWidth = 1;
     tmp.beginPath();
 
     tmp.arc(ax,ay,(d*0.8)/2,0,Math.PI*2,true);
+    tmp.fillStyle = "white";
+    tmp.fill();
 
     tmp.stroke();
 }
+
