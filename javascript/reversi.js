@@ -9,7 +9,7 @@ const inBoard = {
 };
 
 var board = new Array(boardAll);
-var dir8 = [+1,+1+boardWidth,+boardWidth,-1+boardWidth,-1,-1-boardWidth,+1-boardWidth];
+var dir8 = [+1,+1+boardWidth,+boardWidth,-1+boardWidth,-1,-1-boardWidth,-boardWidth,+1-boardWidth];
 var color,x,y,z,move;
 var move,turn;
 
@@ -18,7 +18,8 @@ function put(x,y){
     if(x != 0 && y != 0 && x <= boardSize && y <= boardSize ){
     z = x + y *boardWidth;
     console.log("z:%d",z);
-    board[z] = color;
+    checkPut(z);
+    //    board[z] = color;
     boardDraw();
     color = flipColor(color);
     }
