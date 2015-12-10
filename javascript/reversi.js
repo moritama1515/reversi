@@ -19,7 +19,6 @@ function put(x,y){
     z = x + y *boardWidth;
     console.log("z:%d",z);
     checkPut(z);
-    //    board[z] = color;
     boardDraw();
     color = flipColor(color);
     }

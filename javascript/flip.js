@@ -2,21 +2,26 @@
 
 function checkPut(z)
 {
-    var check,i,flag;
+    var check,i,flag = 0;
     var uncolor = flipColor(color);
 
     if(board[z] == inBoard.stone.empty){
 	board[z] = color;
 	console.log(board);
-    }else{
-	console.log("error");
-    }
-
-    for(i = 0; i < 8; i++){
-	if(checkFlip(z,i) == 1){
-	    flipStone(z,i);
-	    flag += 1;
+	for(i = 0; i < 8; i++){
+	    if(checkFlip(z,i) == 1){
+		flipStone(z,i);
+		flag += 1;
+	    }
 	}
+    }else{
+	console.log("empty error");
+    }   
+    
+    if(flag == 0){
+	color = flipColor(color);
+	board[z] = inBoard.stone.empty;
+	console.log("flip error");
     }
 }
 
