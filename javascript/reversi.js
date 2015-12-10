@@ -11,14 +11,13 @@ const inBoard = {
 var board = new Array(boardAll);
 var dir8 = [+1,+1+boardWidth,+boardWidth,-1+boardWidth,-1,-1-boardWidth,+1-boardWidth];
 var color,x,y,z,move;
-var move;
+var move,turn;
 
-function put(){
-    x = eval(document.fm.X.value);
-    y = eval(document.fm.Y.value);
+function put(x,y){
 
     if(x != 0 && y != 0 && x <= boardSize && y <= boardSize ){
-    var z = x + y *boardWidth;
+    z = x + y *boardWidth;
+    console.log("z:%d",z);
     board[z] = color;
     boardDraw();
     color = flipColor(color);
@@ -30,9 +29,9 @@ function flipColor(color){
 }
 
 function boardIni(){
-
-      color = inBoard.stone.black;
-
+    
+    color = inBoard.stone.black;
+    
     for (var j = 0; j<=boardAll-1; j++){
 	if(j < boardWidth || ((j+1) % boardWidth == 0) || (j % boardWidth == 0) || (boardAll-boardWidth) < j){
 	    board[j] = inBoard.stone.wall;

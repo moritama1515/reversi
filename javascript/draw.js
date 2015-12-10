@@ -1,32 +1,44 @@
 /* draw.js */
 
-const sx = 10;         //xの開始地点                                                                     
-const sy = 10;         //yの開始地点                                                                     
-const w = 40;          //マスの幅                                                                        
-const h = 40;          //マスの高さ                                                                      
-const lw = 1;          //ラインの太さ                                                                    
-const box_row = 8;     //マスの数(row)                                                                   
+const sx = 10;         //xの開始地点
+const sy = 10;         //yの開始地点
+const w = 40;          //マスの幅
+const h = 40;          //マスの高さ
+const lw = 1;          //ラインの太さ
+const box_row = 8;     //マスの数(row)
 const box_column = 8;  //マスの数(column)
 
 function draw(){
+    
     var canvas = document.getElementById('main');
     if (canvas.getContext){
-        var ctx = canvas.getContext('2d');
-	
+	var ctx = canvas.getContext('2d');
     }
     
     drawTable(ctx,sx,sy,w,h,lw,box_row,box_column,1);
     boardIni();
     boardDraw();
+
+    canvas.onmousedown = (function(e){
+	    var rect = e.target.getBoundingClientRect();
+	    
+	    var mx = e.clientX - rect.left;
+	    var my = e.clientY - rect.top;
+	    console.log("mx:%d",mx);
+	    console.log("my:%d",my);
+
+	    x = Math.floor((mx - sx)/w +1);
+	    y = Math.floor((my - sy)/h +1);
+	    put(x,y);
+	
+	});
 }
 
-
 function boardDraw(){
-
+    
     var canvas = document.getElementById('main');
     if (canvas.getContext){
-        var ctx = canvas.getContext('2d');
-
+	var ctx = canvas.getContext('2d');
     }
     
     for(var i = 0; i <= boardAll-1; i++){
@@ -35,8 +47,7 @@ function boardDraw(){
 	}else if(board[i] == inBoard.stone.white){
 	    drawStone(ctx,sx,sy,w,h,i,"w");
 	}
-    }
-
+    }    
 }
 
 function drawTable(tmp,sx,sy,w,h,lw,box_row,box_column,outline){
